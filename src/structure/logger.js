@@ -28,7 +28,6 @@ class Logger extends BaseClass {
             options.parental_level = false;
         }
 
-
         this.parent = options.parent;
         this.setLevel(this.getOption('parental_level', false).toString() === 'true' ? this.getParent().getLevel() : this.getOption('level', null));
         this.applyLevelsAsFunctions();
@@ -65,7 +64,7 @@ class Logger extends BaseClass {
             return;
         }
 
-        let {level, components = [], transports = []} = options;
+        let {level} = options;
 
         if (level === undefined || level === null) {
             level = this.getLevel();
@@ -78,11 +77,12 @@ class Logger extends BaseClass {
         }
 
         options = mergeDeep(options, {
-            components: [...this.getComponents(), ...components].filter(el => !!el),
-            transports: [...this.getTransports(), ...transports].filter(el => !!el),
+            components: [...this.getComponents()].filter(el => !!el),
+            transports: [...this.getTransports()].filter(el => !!el),
             timestamp: new Date(),
             level,
         });
+
 
         const input = args.shift();
 
