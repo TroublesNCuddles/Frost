@@ -1,5 +1,6 @@
 {
   "name": "forst-discord-base",
+  "_name": "Frost",
   "version": "0.1.0",
   "description": "Frost is a Node.js/Discord.js based discord bot base to build bots around",
   "main": "src/index.js",
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/TroublesNCuddles/Frost/issues"
   },
-  "homepage": "https://github.com/TroublesNCuddles/Frost#readme"
+  "homepage": "https://github.com/TroublesNCuddles/Frost#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "luxon": "^1.26.0"
+  }
 }
