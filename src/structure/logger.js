@@ -29,7 +29,7 @@ class Logger extends BaseClass {
         }
 
         this.parent = options.parent;
-        this.setLevel(this.getOption('parental_level', false).toString() === 'true' ? this.getParent().getLevel() : this.getOption('level', null), this.getOption('pass_on_to_parents', false).toString() === 'true');
+        this.setLevel( this.getOption('level', this.getParent() ? this.getParent().getLevel() : null), this.getOption('pass_on_to_parents', false).toString() === 'true');
         this.applyLevelsAsFunctions();
     }
 
@@ -170,7 +170,7 @@ class Logger extends BaseClass {
     }
 
     isLoggableLevel(level, loggable_level) {
-        return level <= loggable_level || this.getLevel();
+        return level <= (loggable_level || this.getLevel());
     }
 
     getLevel() {

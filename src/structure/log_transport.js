@@ -27,7 +27,7 @@ class LogTransport {
     }
 
     isLoggableLevel(level, loggable_level) {
-        return this.getLevel() !== undefined ? level <= loggable_level || this.getLevel() : loggable_level || this.getLogger().isLoggableLevel(level);
+        return this.getLevel() !== undefined ? level <= (loggable_level || this.getLevel()) : this.getLogger().isLoggableLevel(level, loggable_level);
     }
 }
 
