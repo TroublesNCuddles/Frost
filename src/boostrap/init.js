@@ -124,7 +124,7 @@ const init = async (logger, options = {}) => {
     }
 
     const configuration = await loadConfiguration(bootstrap_logger, options.load_configuration);
-    bootstrap_logger.info('Initializing %s v%s by %s', Package._name, Package.version, Package.author);
+    bootstrap_logger.info('Starting %s v%s by %s', Package._name, Package.version, Package.author);
 
     return new Frost(configuration, options.pass_on_logger ? logger : undefined);
 }

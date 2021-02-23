@@ -17,7 +17,7 @@ runner_logger.info('Starting....');
 init(logger, {pass_on_logger: true})
     .then(frost => frost.run())
     .then(() => {
-        runner_logger.info('Done')
+        runner_logger.info('Running.')
     })
     .catch(error => {
         runner_logger.fatal('BOOTSTRAPPING ERROR');
