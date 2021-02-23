@@ -16,7 +16,12 @@ class BaseLoggableClass extends BaseClass {
     }
 
     setupLogger(logger) {
-        const options = this.getOption('logger', {});
+        let options = this.getOption('logger', {});
+
+        if (!(logger instanceof Logger) && logger) {
+            options = mergeDeep(logger, options);
+        }
+
         let components = options.components;
 
         if (typeof components === 'string') {

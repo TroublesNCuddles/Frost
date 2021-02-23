@@ -4,5 +4,6 @@ module.exports = {
     FrostError: require('./error.js'),
     LogTransport: require('./log_transport.js'),
     Logger: require('./logger.js'),
-    FrostManager: require('./manager.js')
+    FrostManager: require('./manager.js'),
+    FrostPlugin: require('./plugin.js')
 };

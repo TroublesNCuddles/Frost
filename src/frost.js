@@ -19,17 +19,17 @@ class Frost extends BaseLoggableClass {
     }
 
     async run() {
-        this.getLogger().info('Running...');
+        this.getLogger().info('Starting...');
         await this.runManagers();
-        this.getLogger().info('Done.');
+        this.getLogger().info('Running.');
     }
 
     async runManagers() {
-        this.getLogger().debug('Running Managers...');
+        this.getLogger().fine('Starting Managers...');
 
         for (const manager of Object.values(this.getManagers())) {
             try {
-                manager.getLogger().info('Running...');
+                manager.getLogger().fine('Starting...');
                 const result = manager.run();
 
                 if (result instanceof Promise) {
@@ -40,23 +40,25 @@ class Frost extends BaseLoggableClass {
                     throw new FrostError("Manager failed to run/update running status", ERROR_CODE.MANAGER_FAILED_RUN);
                 }
 
-                manager.getLogger().fine('Done.');
+                manager.getLogger().fine('Running.');
             } catch (e) {
                 manager.getLogger().fatal('Failed to run.');
                 throw e;
             }
         }
 
-        this.getLogger().fine('Done.');
+        this.getLogger().fine('All managers running.');
     }
 
     registerDefaultManagers() {
+        this.getLogger().fine('Registering default managers');
         for (const [key, Manager] of Object.entries(Managers)) {
             this.registerManager(Manager, key.slice(0, -("Manager".length)), {});
         }
     }
 
     registerManager(Manager, name, options) {
+        this.getLogger().fine('Registering %s Manager', name);
         name = name.toLowerCase();
         options = mergeDeep(this.getOption(`${name}_manager`, {}), options);
 
@@ -66,7 +68,7 @@ class Frost extends BaseLoggableClass {
         this.managers[manager.getName()] = manager;
         this[func_name] = this.getManager.bind(this, manager.getName());
 
-        this.getLogger().info('Registered manager %s under function %s', manager.getName(), func_name);
+        this.getLogger().fine('Registered manager %s under function %s', manager.getName(), func_name);
     }
 
     getManagers() {
