@@ -5,7 +5,7 @@
  */
 class FrostError extends Error {
     constructor(message, code, data) {
-        super(`[${code}]: ${message}`);
+        super(message);
 
         this.code = code;
         this.data = data;

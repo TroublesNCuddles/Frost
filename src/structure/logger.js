@@ -93,8 +93,8 @@ class Logger extends BaseClass {
             });
         } else if (input instanceof Error) {
             options = mergeDeep(options, {
-                message: `[%s%s]${input.message ? ' ' + input.message : ''}`,
-                replacements: [input.name || 'Unknown', (input instanceof FrostError) ? '/' + input.getCode() : ''],
+                message: '[%s]: %s',
+                replacements: [(input instanceof FrostError) ? input.getCode() || 'NO_CODE' : input.name || 'Unknown', input.message ? input.message : 'Missing Error Message...'],
                 error: true
             });
 
