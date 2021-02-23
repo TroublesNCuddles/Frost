@@ -27,14 +27,14 @@ class BaseLoggableClass extends BaseClass {
 
         options.components = components.filter(component => typeof component === 'string');
 
-        if (!logger) {
+        if (this.getFrost() || logger) {
+            this.logger = (logger || this.getFrost().getLogger()).createChildLogger(options);
+        } else {
             this.logger = new Logger(
                 mergeDeep(options, {
                     transports: [new ConsoleLogTransport()]
                 })
             );
-        } else {
-            this.logger = logger.createChildLogger(options);
         }
     }
 
