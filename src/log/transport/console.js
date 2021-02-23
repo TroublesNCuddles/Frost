@@ -31,7 +31,7 @@ class ConsoleLogTransport extends LogTransport {
             (components.length ? `[${components.join(' / ')}]` : undefined),
             ':',
             message,
-            extra ? JSON.stringify(extra, null, 0) : extra
+            extra ? "\nEXTRA START\n" + JSON.stringify(extra, null, 2).split('\n').map((part, index) => `\t[${index + 1}]  ${part}`).join('\n') + "\nEXTRA EMD" : null
         ]
             .filter(element => !!element)
             .join(' ');
