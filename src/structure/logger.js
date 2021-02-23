@@ -29,7 +29,7 @@ class Logger extends BaseClass {
         }
 
         this.parent = options.parent;
-        this.setLevel(this.getOption('parental_level', false).toString() === 'true' ? this.getParent().getLevel() : this.getOption('level', null));
+        this.setLevel(this.getOption('parental_level', false).toString() === 'true' ? this.getParent().getLevel() : this.getOption('level', null), this.getOption('pass_on_to_parents', false).toString() === 'true');
         this.applyLevelsAsFunctions();
     }
 
@@ -177,7 +177,7 @@ class Logger extends BaseClass {
         return this.getParent() ? this.getParent().getLevel() : this.level;
     }
 
-    setLevel(level) {
+    setLevel(level, pass_on_to_parents) {
         if (!level) {
             level = LOG_LEVEL.DEBUG;
         }
@@ -191,6 +191,10 @@ class Logger extends BaseClass {
         }
 
         this.level = level;
+
+        if (this.getParent() && pass_on_to_parents) {
+            this.getParent().setLevel(level, pass_on_to_parents);
+        }
     }
 
     getComponents() {

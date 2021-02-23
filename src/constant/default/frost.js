@@ -1,5 +1,7 @@
 module.exports = {
     logger: {
-        components: ['Frost']
+        components: ['Frost'],
+        pass_on_to_parents: true,
+        level: 600
     }
 };
