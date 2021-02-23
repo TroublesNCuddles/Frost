@@ -1,28 +1,26 @@
 const {init} = require('./init.js');
+const {Logger} = require('../structure/index.js');
+const {
+    Transports: {
+        Console: ConsoleLogTransport
+    }
+} = require('../log/index.js');
 
-let logger;
+let logger = new Logger({
+    components: [],
+    transports: [new ConsoleLogTransport()]
+});
+let runner_logger = logger.createChildLogger({components: ['Bootstrap', 'Runner']});
 
-init()
-    .then(([frost, bootstrap_logger]) => {
-        logger = bootstrap_logger;
+runner_logger.info('Starting....');
 
-        return frost.run();
-    })
+init(logger, {pass_on_logger: true})
+    .then(frost => frost.run())
     .then(() => {
-        if (logger) {
-            logger.info('Done');
-        }
+        runner_logger.info('Done')
     })
     .catch(error => {
-        if (logger) {
-            logger.fatal(error);
-            process.exit(1);
-
-            return;
-        }
-
-        console.error('FATAL BOOTSTRAPPING ERROR');
-        console.error(error.message);
-        console.error(error.stack);
+        runner_logger.fatal('BOOTSTRAPPING ERROR');
+        runner_logger.fatal(error);
         process.exit(1);
     });
