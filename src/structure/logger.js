@@ -29,7 +29,7 @@ class Logger extends BaseClass {
         }
 
         this.parent = options.parent;
-        this.setLevel( this.getOption('level', this.getParent() ? this.getParent().getLevel() : null), this.getOption('pass_on_to_parents', false).toString() === 'true');
+        this.setLevel(this.getOption('level', this.getParent() ? this.getParent().getLevel() : null), this.getOption('pass_on_to_parents', false).toString() === 'true');
         this.applyLevelsAsFunctions();
     }
 
@@ -120,6 +120,10 @@ class Logger extends BaseClass {
 
             if (input instanceof FrostError) {
                 options.data = input.data;
+                options.extra = options.extra ? {
+                    LogExtra: options.extra,
+                    ErrorData: input.getData()
+                } : {ErrorData: input.getData()};
             }
         }
 
