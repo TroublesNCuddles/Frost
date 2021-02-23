@@ -1,7 +1,9 @@
+const LOG_LEVEL = require('../log_level.js');
+
 module.exports = {
     logger: {
         components: ['Frost'],
         pass_on_to_parents: true,
-        level: 600
+        level: LOG_LEVEL.INFO
     }
 };
