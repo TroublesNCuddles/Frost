@@ -7,6 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "frost": "./src/boostrap/runner.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TroublesNCuddles/Frost.git"
@@ -18,7 +21,12 @@
   },
   "homepage": "https://github.com/TroublesNCuddles/Frost#readme",
   "dependencies": {
+    "@r6stats/node": "^4.0.0-alpha3",
     "discord.js": "^12.5.1",
-    "luxon": "^1.26.0"
-  }
+    "luxon": "^1.26.0",
+    "mongodb": "^3.6.4"
+  },
+  "contributors": [
+    "<@468601978432389130>"
+  ]
 }

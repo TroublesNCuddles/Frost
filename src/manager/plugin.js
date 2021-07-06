@@ -161,7 +161,7 @@ class PluginManager extends FrostManager {
             priority
         } = Definition;
         const default_options = Definition.default_options;
-        const options = mergeDeep(default_options, this.getFrost().getOption(`plugin=>${name}`, {}));
+        const options = mergeDeep(default_options, this.getFrost().getOption(`plugin=>${name.toLowerCase()}`, {}));
         let logger = this.getFrost().getLogger().createChildLogger(mergeDeep(options.logger || {}, {
             components: ['Plugin', name]
         }));
@@ -253,7 +253,7 @@ class PluginManager extends FrostManager {
             throw new FrostError("Plugin failed to run/update running status", ERROR_CODE.PLUGIN_FAILED_RUN, {plugin: plugin.getDefinition().name});
         }
 
-        plugin.getLogger().fine('Running.');
+        plugin.getLogger().info('Running.');
     }
 
     async run() {

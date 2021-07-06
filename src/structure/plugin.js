@@ -9,6 +9,20 @@ class FrostPlugin extends BaseLoggableClass {
         this.children = {};
         this.parent = null;
         this.running = false;
+        this.managers = {};
+    }
+
+    async registerManagers(Managers) {
+        for (const [key, Manager] of Object.entries(Managers)) {
+            await this.registerManager(Manager, key.slice(0, -("Manager".length)), {});
+        }
+    }
+
+    async registerManager(Manager, name, options) {
+        await this.getFrost().registerManager(Manager, name, options, this);
+        const manager = this.getFrost().getManager(name);
+        this.managers[manager.getName()] = manager;
+        this[`get${manager.getName()}Manager`] = this.getFrost().getManager.bind(this, manager.getName());
     }
 
     run() {
@@ -49,6 +63,10 @@ class FrostPlugin extends BaseLoggableClass {
 
     isRunning() {
         return this.running;
+    }
+
+    getName() {
+        return this.getDefinition().name;
     }
 }
 

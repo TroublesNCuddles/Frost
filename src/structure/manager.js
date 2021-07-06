@@ -5,7 +5,7 @@ const {
 } = require('../util/index.js');
 
 class FrostManager extends BaseLoggableClass {
-    constructor(name, options, frost, logger) {
+    constructor(name, options, frost, logger, plugin) {
         super(
             mergeDeep({
                     logger: {
@@ -19,6 +19,7 @@ class FrostManager extends BaseLoggableClass {
         );
 
         this.name = capitalize(name);
+        this.plugin = plugin;
         this.running = false;
     }
 
@@ -32,6 +33,10 @@ class FrostManager extends BaseLoggableClass {
 
     getName() {
         return this.name;
+    }
+
+    getPlugin() {
+        return this.plugin;
     }
 }
 

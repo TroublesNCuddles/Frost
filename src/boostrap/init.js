@@ -31,6 +31,7 @@ const {
 } = require('../util/index.js');
 const Package = require('../../package.json');
 const Frost = require('../frost.js');
+const path = require('path');
 
 /*
  *
@@ -101,6 +102,10 @@ const loadConfiguration = async (logger, options = {}) => {
         } else {
             logger.warning(failing_error);
         }
+    }
+
+    if (process.argv.length > 2) {
+        configuration = mergeDeep(configuration, {parent_package: require(path.join(process.cwd(), process.argv[2]))})
     }
 
     logger.fine('Got %d key(s) overall', countKeys(configuration));
