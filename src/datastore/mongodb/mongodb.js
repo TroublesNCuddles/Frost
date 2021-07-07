@@ -4,9 +4,6 @@ const {URL} = require('url');
 const {DEFAULT_OPTIONS} = require('./constant/index.js');
 
 class DatastoreMongoDB extends Datastore {
-    constructor(...args) {
-        super("MongoDB", ...args);
-    }
 
     async connect() {
         if (!this.getURL()) {
@@ -22,6 +19,7 @@ class DatastoreMongoDB extends Datastore {
 
         this.client = await MongoClient.connect(this.getURL(), driver_options);
         this.database = this.getClient().db();
+        this.connected = true;
         this.getLogger().info('Connected');
     }
 

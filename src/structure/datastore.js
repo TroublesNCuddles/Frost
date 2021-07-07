@@ -11,13 +11,15 @@ const BaseLoggableClass = require('./base_loggable.js');
 
 
 class Datastore extends BaseLoggableClass {
-    constructor(name, frost, options, logger) {
+    constructor(name, frost, options, logger, plugin) {
         super(mergeDeep({
             logger: {
                 components: ['Datastore', capitalize(name)]
             }
         }, options), frost, logger);
 
+        this.plugin = plugin;
+        this.connected = false;
         this.name = name;
     }
 
@@ -31,6 +33,14 @@ class Datastore extends BaseLoggableClass {
 
     getFrost() {
         return this.frost;
+    }
+
+    getPlugin() {
+        return this.plugin;
+    }
+
+    isConnected() {
+        return this.connected;
     }
 
 }

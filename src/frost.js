@@ -16,11 +16,13 @@ class Frost extends BaseLoggableClass {
         super(options, null, logger);
 
         this.managers = {};
-        this.registerDefaultManagers();
+        this.datastores = {};
     }
 
     async run() {
         this.getLogger().info('Starting...');
+        this.registerDefaultDatastores();
+        this.registerDefaultManagers();
         this.getLogger().info('Running.');
     }
 
@@ -30,6 +32,56 @@ class Frost extends BaseLoggableClass {
             this.registerManager(Manager, key.slice(0, -("Manager".length)), {}).catch(e => {
                 this.getLogger().error('Failed to register and launch manager: ' + key.slice(0, -("Manager".length)) + '. \n%s' + e.stack);
             });
+        }
+    }
+
+    registerDefaultDatastores() {
+        this.getLogger().fine('Registering default datastores');
+        for (const [key, {Datastore, Definition}] of Object.entries(Datastores)) {
+            this.registerDatastore(Datastore, Definition.name, Definition.default_options || {}).catch(e => {
+                this.getLogger().error('Failed to register and launch datastore: ' + Definition.name + '. \n%s' + e.stack);
+            });
+        }
+    }
+
+    async registerDatastore(Datastore, name, options, plugin) {
+        this.getLogger().fine('Registering %s Datastore.%s', name, plugin !== undefined ? `On behalf of Plugin: ${plugin.getName()}` : '');
+        options = mergeDeep(plugin ? plugin.getOption(`datastore=>${name}`, {}) : this.getOption(`datastore=>${name}`, {}), options);
+
+        const datastore = new Datastore(name, this, options, undefined, plugin);
+        const func_name = `get${datastore.getName()}Datastore`;
+
+        this.datastores[datastore.getName()] = datastore;
+        this[func_name] = this.getDatastore.bind(this, datastore.getName());
+
+        this.getLogger().fine('Registered datastore %s under function %s', datastore.getName(), func_name);
+
+        return this.runDatastore(datastore.getName());
+    }
+
+    async runDatastore(datastore_name) {
+        const datastore = this.getDatastore(datastore_name);
+
+        if (!datastore) {
+            throw new FrostError(`No such datastore ${datastore_name}`, ERROR_CODE.INVALID_DATASTORE);
+        }
+
+        try {
+            datastore.getLogger().fine('Starting...');
+            const result = datastore.connect();
+
+            if (result instanceof Promise) {
+                await result;
+            }
+
+            if (!datastore.isConnected()) {
+                throw new FrostError("Datastore failed to run/update running status", ERROR_CODE.DATASTORE_FAILED_RUN);
+            }
+
+            datastore.getLogger().fine('Running.');
+        } catch (e) {
+            datastore.getLogger().fatal('Failed to run.');
+            throw e;
         }
     }
 
@@ -79,7 +131,15 @@ class Frost extends BaseLoggableClass {
     }
 
     getManager(name) {
-        return this.managers[name];
+        return this.getManagers()[name];
+    }
+
+    getDatastores() {
+        return this.datastores;
+    }
+
+    getDatastore(name) {
+        return this.getDatastores()[name];
     }
 }
 

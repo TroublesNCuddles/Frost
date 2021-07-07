@@ -1,3 +1,3 @@
 module.exports = {
-    MongoDB: require('./mongodb/index.js')
+    MongoDBDatastore: require('./mongodb/index.js')
 };
