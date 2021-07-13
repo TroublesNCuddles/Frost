@@ -1,7 +1,7 @@
 {
   "name": "@trblsncuddls/frost",
   "_name": "Frost",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Frost is a Node.js/Discord.js based discord bot base to build bots around",
   "main": "src/index.js",
   "scripts": {
