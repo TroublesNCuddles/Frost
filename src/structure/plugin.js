@@ -10,6 +10,7 @@ class FrostPlugin extends BaseLoggableClass {
         this.parent = null;
         this.running = false;
         this.managers = {};
+        this.commands = {};
     }
 
     async registerManagers(Managers) {
@@ -67,6 +68,26 @@ class FrostPlugin extends BaseLoggableClass {
 
     getName() {
         return this.getDefinition().name;
+    }
+
+    getDescription() {
+        return this.getDefinition().description;
+    }
+
+    getVersion() {
+        return this.getDefinition().version;
+    }
+
+    getAuthor() {
+        return this.getDefinition().author;
+    }
+
+    getCommands() {
+        return this.commands;
+    }
+
+    hasCommands() {
+        return Object.values(this.getCommands()).length > 0;
     }
 }
 

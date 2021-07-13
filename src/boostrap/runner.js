@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const {init} = require('./init.js');
 const {Logger} = require('../structure/index.js');
 const {

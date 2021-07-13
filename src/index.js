@@ -5,5 +5,6 @@ module.exports = {
     Structure: require('./structure/index.js'),
     Util: require('./util/index.js'),
     Frost: require('./frost.js'),
-    Bootstrap: require('./boostrap/index.js')
+    Bootstrap: require('./boostrap/index.js'),
+    DiscordJS: require('discord.js')
 };

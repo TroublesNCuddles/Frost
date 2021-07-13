@@ -81,7 +81,7 @@ const loadConfiguration = async (logger, options = {}) => {
         })
 
         if (errors.length > 0) {
-            logger.warning('Errors occoured while loading flatfiles');
+            logger.warning('Errors occurred while loading flatfiles');
             errors.forEach(([content, error, type], index) => logger.error('[%d], %s:%s; ', index + 1, type, content, error.message));
         }
     }
@@ -97,15 +97,17 @@ const loadConfiguration = async (logger, options = {}) => {
     if (failing_error) {
         logger.warning('Failed to build FlatFile options');
 
-        if (typeof failing_error === Error) {
+        if (typeof failing_error instanceof Error) {
             logger.error(failing_error);
         } else {
             logger.warning(failing_error);
         }
     }
 
-    if (process.argv.length > 2) {
-        configuration = mergeDeep(configuration, {parent_package: require(path.join(process.cwd(), process.argv[2]))})
+    try {
+        configuration = mergeDeep(configuration, {master: require(path.join(process.cwd(), "package.json"))});
+    } catch (e) {
+        console.log(e);
     }
 
     logger.fine('Got %d key(s) overall', countKeys(configuration));
@@ -129,7 +131,14 @@ const init = async (logger, options = {}) => {
     }
 
     const configuration = await loadConfiguration(bootstrap_logger, options.load_configuration);
-    bootstrap_logger.info('Starting %s v%s by %s', Package._name, Package.version, Package.author);
+    const {master: {_name, name, version, author}} = configuration;
+
+    if (name === Package.name) {
+        bootstrap_logger.info('Starting %s v%s by %s', Package.name, Package.version, Package.author);
+        bootstrap_logger.warning('FROST SHOULD NOT BE RUN STANDALONE');
+    } else {
+        bootstrap_logger.info('Starting %s v%s by %s based upon %s v%s by %s', _name || name, version, author, Package._name || Package.name, Package.version, Package.author);
+    }
 
     return new Frost(configuration, options.pass_on_logger ? logger : undefined);
 }

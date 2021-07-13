@@ -14,7 +14,12 @@ const path = require('path');
  *
  */
 
-const DEFAULT_FILE_PATHS = [path.join(process.cwd(), 'lib', 'configs'), path.join(os.homedir(), Package._name, 'configs'), path.join(os.homedir(), Package._name, 'lib', 'configs')];
+const DEFAULT_FILE_PATHS = [
+    path.join(process.cwd(), 'lib', 'configs'),
+    path.join(os.homedir(), Package._name, 'configs'),
+    path.join(os.homedir(), Package._name, 'lib', 'configs'),
+    path.join(__dirname, '..', '..', 'lib', 'configs')
+];
 
 const parse = buffer => {
     return JSON.parse(buffer.toString('utf8'));
@@ -81,7 +86,8 @@ const build = async (paths) => {
     }
 
     try {
-        files = await loadFiles(files);
+        //Removing duplicate entries
+        files = await loadFiles([...new Set(files)]);
         files = parseFiles(files);
     } catch (error) {
         return {failing_error: error, errors};

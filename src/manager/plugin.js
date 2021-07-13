@@ -83,7 +83,10 @@ class PluginManager extends FrostManager {
                 dependencies,
                 priority,
                 parent,
-                optional
+                optional,
+                description,
+                author,
+                version
             } = Definition;
 
             return {
@@ -91,6 +94,9 @@ class PluginManager extends FrostManager {
                 Definition: {
                     name,
                     default_options,
+                    description,
+                    author,
+                    version,
                     dependencies: ['datastores', 'plugins', 'managers'].reduce((accumulator, key) => {
                         const raw_dependency = dependencies[key] || [];
 
@@ -181,16 +187,9 @@ class PluginManager extends FrostManager {
                 components: ['Child', name]
             }));
             dependencies.plugins = [parent_name, ...dependencies.plugins];
+            Definition.dependencies = dependencies;
+            Definition.parent = parent_name;
         }
-
-        Definition = {
-            dependencies,
-            parent: parent_name,
-            name,
-            optional,
-            default_options,
-            priority
-        };
 
         const dependency_check = this.checkDependencies(dependencies, false);
 
@@ -298,7 +297,17 @@ class PluginManager extends FrostManager {
     }
 
     getPlugin(name) {
-        return this.getPlugins()[name];
+        if (this.getPlugins()[name]) {
+            return this.getPlugins()[name];
+        }
+
+        for (const plugin of Object.values(this.getPlugins())) {
+            if (plugin.getName().toLowerCase() === name.toLowerCase()) {
+                return plugin;
+            }
+        }
+
+        return undefined;
     }
 }
 

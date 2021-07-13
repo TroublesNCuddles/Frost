@@ -95,7 +95,7 @@ class Frost extends BaseLoggableClass {
         this.managers[manager.getName()] = manager;
         this[func_name] = this.getManager.bind(this, manager.getName());
 
-        this.getLogger().fine('Registered manager %s under function %s', manager.getName(), func_name);
+        this.getLogger().info('Registered manager %s under function %s', manager.getName(), func_name);
 
         return this.runManager(manager.getName());
     }
@@ -131,7 +131,7 @@ class Frost extends BaseLoggableClass {
     }
 
     getManager(name) {
-        return this.getManagers()[name];
+        return this.managers[name];
     }
 
     getDatastores() {
@@ -139,7 +139,7 @@ class Frost extends BaseLoggableClass {
     }
 
     getDatastore(name) {
-        return this.getDatastores()[name];
+        return this.datastores[name];
     }
 }
 

@@ -12,6 +12,10 @@ class FrostError extends Error {
         this.time = new Date();
     }
 
+    getMessage() {
+        return this.message;
+    }
+
     getCode() {
         return this.code;
     }
