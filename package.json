@@ -1,0 +1,28 @@
+{
+  "name": "@trblsncuddls/frost",
+  "_name": "Frost",
+  "version": "1.0.0",
+  "description": "Frost is a Node.js/Discord.js based discord bot base to build bots around",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "frost": "./src/boostrap/runner.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TroublesNCuddles/Frost.git"
+  },
+  "author": "Troubles'N Cuddles <Development@TroublesNCuddl.es>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TroublesNCuddles/Frost/issues"
+  },
+  "homepage": "https://github.com/TroublesNCuddles/Frost#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "luxon": "^1.26.0",
+    "mongodb": "^3.6.4"
+  }
+}
