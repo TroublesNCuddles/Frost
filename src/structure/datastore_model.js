@@ -1,5 +1,5 @@
 class DatastoreModel {
-    constructor(name, result, datastore) {
+    constructor(name, datastore, result) {
         this._name = name;
         this.result = result;
         this.datastore = datastore;
@@ -35,6 +35,8 @@ class DatastoreModel {
     }
 
     async update() {
+        const _save_query = this._save_query;
+        this._save_query = undefined;
         while (this.needsUpdate()) {
             const update_fn_name = this.getNextUpdateCall();
 
@@ -45,7 +47,7 @@ class DatastoreModel {
             }
         }
 
-        return this.save();
+        this._save_query = _save_query;
     }
 
     async save() {

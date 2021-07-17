@@ -3,8 +3,10 @@ const {String: {capitalize}} = require('../../../util/index.js');
 const {ObjectID} = require('mongodb');
 
 class MongoDBModel extends DatastoreModel {
-    constructor(name, result, datastore) {
-        super(`MongoDB:${capitalize(name)}`, result, datastore);
+    constructor(name, datastore, result) {
+        super(`MongoDB:${capitalize(name)}`, datastore, result);
+
+        this._save_query = undefined;
     }
 
     _normalizeMetadata() {
@@ -22,12 +24,35 @@ class MongoDBModel extends DatastoreModel {
         this.metadata = _metadata;
     }
 
+    static create(version = 1, type) {
+        return {
+            _metadata: {
+                version,
+                created: new Date(),
+                last_update: new Date(),
+                type,
+                deleted: false
+            }
+        }
+    }
+
     getDocument() {
         return this.getRawResult();
     }
 
     async save() {
-        await super.save();
+        if (this._save_query) {
+            await super.save();
+        }
+
+        const result = await this.getCollection().updateOne({_id: this.getID()}, this._save_query);
+
+        if (result.modifiedCount > 0) {
+            this._save_query = undefined;
+            return true;
+        }
+
+        return false;
     }
 
     getID() {
@@ -65,6 +90,7 @@ class MongoDBModel extends DatastoreModel {
 
     setLastUpdate(last_update) {
         this.metadata.last_update = last_update;
+        this._set("_metadata.last_update", last_update);
     }
 
     isDeleted() {
@@ -73,6 +99,7 @@ class MongoDBModel extends DatastoreModel {
 
     setDeleted(deleted) {
         this.metadata.deleted = deleted;
+        this._set("_metadata.deleted", deleted);
     }
 
     getType() {
@@ -81,6 +108,18 @@ class MongoDBModel extends DatastoreModel {
 
     setType(type) {
         this.metadata.type = type;
+    }
+
+    _set(key, value) {
+        if (!this._save_query) {
+            this._save_query = {};
+        }
+
+        if (!this._save_query['$set']) {
+            this._save_query['$set'] = {}
+        }
+
+        this._save_query['$set'][key] = value;
     }
 }
 

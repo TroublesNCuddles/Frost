@@ -1,11 +1,11 @@
-const {FrostManager, FrostError, FrostPlugin} = require('../structure/index.js');
+const {FrostManager, FrostError} = require('../structure/index.js');
 const {ERROR_CODE, PLUGIN_MANAGER: PLUGIN_MANAGER_CONSTANTS} = require('../constant/index.js');
 const {Object: {mergeDeep}, fs} = require('../util/index.js');
 const Path = require('path');
 
 class PluginManager extends FrostManager {
     constructor(name, options, ...args) {
-        super(name, mergeDeep(options), ...args);
+        super(name, options, ...args);
 
         this.plugins = {};
     }

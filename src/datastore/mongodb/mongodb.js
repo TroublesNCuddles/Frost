@@ -23,6 +23,14 @@ class DatastoreMongoDB extends Datastore {
         this.getLogger().info('Connected');
     }
 
+    registerModel(model) {
+        const collection_name = (this.getModelName(model) + 's').toLowerCase();
+        model.prototype['getCollection'] = this.getCollection.bind(this, collection_name);
+        model['getCollection'] = this.getCollection.bind(this, collection_name);
+
+        return super.registerModel(model);
+    }
+
     getURL() {
         return this.getOption('url', null);
     }
